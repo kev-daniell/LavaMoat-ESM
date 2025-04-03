@@ -1,7 +1,3 @@
-module.exports = {
-  checkForResolutionOverride,
-}
-
 function checkForResolutionOverride(
   resolutions,
   parentPackageName,
@@ -15,3 +11,5 @@ function checkForResolutionOverride(
     }
   }
 }
+
+export { checkForResolutionOverride }

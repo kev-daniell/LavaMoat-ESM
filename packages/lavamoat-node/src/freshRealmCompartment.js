@@ -1,7 +1,5 @@
-const vm = require('node:vm')
-const { getSesShimSrc } = require('lavamoat-core/src/generateKernel')
-
-module.exports = { createFreshRealmCompartment }
+import { getSesShimSrc } from 'lavamoat-core/src/generateKernel.js'
+import vm from 'node:vm'
 
 let sesCompartmentSrc
 
@@ -26,3 +24,5 @@ function createFreshRealmCompartment() {
   const compartment = vm.runInContext('new Compartment()', context)
   return compartment
 }
+
+export { createFreshRealmCompartment }

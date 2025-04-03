@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 /* eslint-disable no-eval */
 
-const yargs = require('yargs')
-const yargsFlags = require('./yargsFlags')
-const { runLava } = require('./index')
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import { runLava } from './index.js'
+import yargsFlags from './yargsFlags.js'
 
-const defaults = require('./defaults')
+import defaults from './defaults.js'
 
 runLava(parseArgs()).catch((err) => {
   // explicity log stack to workaround https://github.com/endojs/endo/issues/944
@@ -14,16 +15,22 @@ runLava(parseArgs()).catch((err) => {
 })
 
 function parseArgs() {
-  const argsParser = yargs
-    .usage('$0 <entryPath>', 'start the application', (yargs) => {
-      // the entry file to run (or parse)
-      yargs.positional('entryPath', {
-        describe:
-          'the path to the entry file for your application. same as node.js',
-        type: 'string',
-      })
-      yargsFlags(yargs, defaults)
-    })
+  // Properly initialize yargs in ESM mode using hideBin
+  const argsParser = yargs(hideBin(process.argv))
+    // Configure as before
+    .command(
+      '$0 <entryPath>',
+      'start the application (kevin-watermark)',
+      (yargs) => {
+        // the entry file to run (or parse)
+        yargs.positional('entryPath', {
+          describe:
+            'the path to the entry file for your application. same as node.js',
+          type: 'string',
+        })
+        yargsFlags(yargs, defaults)
+      }
+    )
     .help()
 
   const parsedArgs = argsParser.parse()

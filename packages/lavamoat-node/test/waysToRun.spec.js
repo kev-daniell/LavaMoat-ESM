@@ -1,8 +1,13 @@
-const test = require('ava')
-const util = require('node:util')
-const execFile = util.promisify(require('node:child_process').execFile)
+import test from 'ava'
+import util from 'node:util'
+import { execFile as execFileCallback } from 'node:child_process'
+import { runLava } from '../src/index.js'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const { runLava } = require('../src/index')
+const execFile = util.promisify(execFileCallback)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 test('use lavamoat cli', async (t) => {
   const projectRoot = `${__dirname}/projects/2`

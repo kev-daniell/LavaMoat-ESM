@@ -1,8 +1,12 @@
-const path = require('node:path')
-const { readFileSync } = require('node:fs')
-const test = require('ava')
-const { parseForPolicy } = require('../src/parseForPolicy')
-const { runLavamoat } = require('./util')
+import path from 'node:path'
+import { readFileSync } from 'node:fs'
+import test from 'ava'
+import { parseForPolicy } from '../src/parseForPolicy.js'
+import { runLavamoat } from './util.js'
+import { fileURLToPath } from 'node:url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 test('parseForPolicy - resolutions', async (t) => {
   const projectRoot = path.join(__dirname, 'projects', '1')
