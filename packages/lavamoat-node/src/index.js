@@ -1,17 +1,43 @@
 /* eslint-disable no-eval */
 
-const path = require('node:path')
-const fs = require('node:fs')
-const {
+import { loadCanonicalNameMap } from '@lavamoat/aa'
+import {
+  jsonStringifySortedPolicy,
   loadPolicy,
   loadPolicyAndApplyOverrides,
-  jsonStringifySortedPolicy,
-} = require('lavamoat-core')
-const { loadCanonicalNameMap } = require('@lavamoat/aa')
-const { parseForPolicy } = require('./parseForPolicy')
-const { createKernel } = require('./kernel')
+} from 'lavamoat-core'
+import fs from 'node:fs'
+import path from 'node:path'
+import { createKernel, runESMWithKernel } from './kernel.js'
+import { parseForPolicy } from './parseForPolicy.js'
 
-const defaults = require('./defaults')
+import defaults from './defaults.js'
+
+// Helper function to check if a file is an ESM module
+async function isESMModule(filePath) {
+  // If it has .mjs extension, it's definitely ESM
+  if (filePath.endsWith('.mjs')) return true
+
+  try {
+    // For .js files, we need to check package.json
+    if (filePath.endsWith('.js')) {
+      try {
+        // Look for nearest package.json to determine module type
+        const packagePath = path.join(path.dirname(filePath), 'package.json')
+        const packageJson = JSON.parse(
+          await fs.promises.readFile(packagePath, 'utf8')
+        )
+        return packageJson.type === 'module'
+      } catch (err) {
+        // If we can't find or read package.json, assume CommonJS
+        return false
+      }
+    }
+    return false
+  } catch (err) {
+    return false
+  }
+}
 
 async function runLava(options) {
   options = Object.assign({}, defaults, options)
@@ -84,18 +110,45 @@ async function runLava(options) {
       rootDir: projectRoot,
       includeDevDeps: true,
     })
-    const kernel = createKernel({
-      projectRoot,
-      lavamoatPolicy,
-      canonicalNameMap,
-      scuttleGlobalThis,
-      debugMode,
-      statsMode,
-    })
 
-    // run entrypoint
-    kernel.internalRequire(entryId)
+    // Check if entry module is ESM
+    const isEsm = entryId.endsWith('.mjs') || (await isESMModule(entryId))
+
+    if (isEsm) {
+      // For ESM modules, we use a secure ESM execution path
+      // that applies the same kernel protections
+      try {
+        // Use the ESM kernel executor that applies the same lockdown
+        await runESMWithKernel({
+          projectRoot,
+          entryId,
+          lavamoatPolicy,
+          canonicalNameMap,
+          scuttleGlobalThis,
+          debugMode,
+          statsMode,
+        })
+      } catch (err) {
+        console.error(
+          `LavaMoat - Error executing ESM module "${entryId}": ${err.message}`
+        )
+        throw err
+      }
+    } else {
+      // Standard CJS execution path
+      const kernel = createKernel({
+        projectRoot,
+        lavamoatPolicy,
+        canonicalNameMap,
+        scuttleGlobalThis,
+        debugMode,
+        statsMode,
+      })
+
+      // run entrypoint
+      kernel.internalRequire(entryId)
+    }
   }
 }
 
-module.exports = { runLava }
+export { runLava }

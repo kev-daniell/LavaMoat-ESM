@@ -1,4 +1,4 @@
-const { getDefaultPaths } = require('lavamoat-core')
+import { getDefaultPaths } from 'lavamoat-core'
 
 const defaultPaths = getDefaultPaths('node')
 
@@ -17,4 +17,4 @@ const defaults = {
   statsMode: false,
 }
 
-module.exports = defaults
+export default defaults

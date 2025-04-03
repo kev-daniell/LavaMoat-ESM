@@ -1,6 +1,7 @@
 {
-  "name": "lavamoat",
+  "name": "lm-esm",
   "version": "9.0.8",
+  "type": "module",
   "description": "",
   "repository": {
     "type": "git",
@@ -21,6 +22,9 @@
     "lavamoat-run-command": "src/run-command.js"
   },
   "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
   "directories": {
     "example": "examples",
     "test": "test"

@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 /* eslint-disable no-eval */
 
-const path = require('node:path')
-const fs = require('node:fs')
-const yargs = require('yargs')
-const yargsFlags = require('./yargsFlags')
-const { runLava } = require('./index')
+import fs from 'node:fs'
+import path from 'node:path'
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import { runLava } from './index.js'
+import yargsFlags from './yargsFlags.js'
 
-const defaults = require('./defaults')
+import defaults from './defaults.js'
 
 runLava(parseArgs()).catch((err) => {
   // explicity log stack to workaround https://github.com/endojs/endo/issues/944
@@ -16,8 +17,8 @@ runLava(parseArgs()).catch((err) => {
 })
 
 function parseArgs() {
-  const argsParser = yargs
-    .usage(
+  const argsParser = yargs(hideBin(process.argv))
+    .command(
       '$0',
       'lavamoat-run-command [flags for lavamoat] -- command [args for the command]',
       (yarn) => yargsFlags(yarn, defaults)
