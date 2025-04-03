@@ -1,0 +1,9 @@
+{
+  "resources": {
+    "test-esm-project": {
+      "packages": {
+        "bad-esm-module": true
+      }
+    }
+  }
+}

@@ -1,12 +1,14 @@
 // @ts-check
 
-const util = require('node:util')
-const execFile = util.promisify(require('node:child_process').execFile)
-const { prepareScenarioOnDisk } = require('lavamoat-core/test/util.js')
-module.exports = {
-  runLavamoat,
-  runScenario,
-}
+import utils from 'lavamoat-core/test/util.js'
+import { execFile as execFileCb } from 'node:child_process'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import util from 'node:util'
+
+const execFile = util.promisify(execFileCb)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 /**
  * Add one or more CLI options to an array of args
@@ -38,6 +40,7 @@ function setOptToArgs(args, key, value) {
 
 /**
  * Converts options within a `NormalizedScenario` to CLI args.
+ *
  * @param {import('lavamoat-core/test/scenarios/scenario').NormalizedScenario} scenario
  * @returns {string[]}
  */
@@ -54,11 +57,12 @@ function convertOptsToArgs(scenario) {
 
 /**
  * Runs Lavamoat CLI
- * @param {{args?: string[], cwd?: string}} opts
- * @returns {Promise<{output: {stdout: string, stderr: string}}>}
+ *
+ * @param {{ args?: string[]; cwd?: string }} opts
+ * @returns {Promise<{ output: { stdout: string; stderr: string } }>}
  */
 async function runLavamoat({ args = [], cwd = process.cwd() } = {}) {
-  const lavamoatPath = require.resolve('../src/cli')
+  const lavamoatPath = path.join(__dirname, '../src/cli.js')
   const output = await execFile(lavamoatPath, args, { cwd })
   return { output }
 }
@@ -66,14 +70,17 @@ async function runLavamoat({ args = [], cwd = process.cwd() } = {}) {
 /**
  * Run the given scenario.
  *
- * The `scenario` itself should be passed thru `createScenarioFromScaffold` to normalize it.
+ * The `scenario` itself should be passed thru `createScenarioFromScaffold` to
+ * normalize it.
  *
- * @template [T=unknown]
- * @param {{scenario: import('lavamoat-core/test/scenarios/scenario').NormalizedScenario}} opts
+ * @template [T=unknown] Default is `unknown`
+ * @param {{
+ *   scenario: import('lavamoat-core/test/scenarios/scenario').NormalizedScenario
+ * }} opts
  * @returns {Promise<T>}
  */
 async function runScenario({ scenario }) {
-  const { projectDir } = await prepareScenarioOnDisk({
+  const { projectDir } = await utils.prepareScenarioOnDisk({
     scenario,
     policyName: 'node',
   })
@@ -92,3 +99,5 @@ async function runScenario({ scenario }) {
   }
   return result
 }
+
+export { runLavamoat, runScenario }
