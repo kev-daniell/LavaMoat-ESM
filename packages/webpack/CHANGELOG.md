@@ -18,6 +18,43 @@
   * dependencies
     * lavamoat-core bumped from ^15.2.0 to ^15.2.1
 
+## [0.10.0-beta.0](https://github.com/kev-daniell/LavaMoat-ESM/compare/webpack-v0.9.0-beta.0...webpack-v0.10.0-beta.0) (2025-04-08)
+
+
+### Features
+
+* **webpack:** add undocumented __unsafeAllowContextModules flag to allow experimenting with contextmodules without leaving them vulnerable by default ([8eca7f1](https://github.com/kev-daniell/LavaMoat-ESM/commit/8eca7f16dc0270875f99e329b46fd5555c8e1e9d))
+* **webpack:** avoid emiting resource assets from packages by default ([#1451](https://github.com/kev-daniell/LavaMoat-ESM/issues/1451)) ([325bf2a](https://github.com/kev-daniell/LavaMoat-ESM/commit/325bf2a1dc5c9c048ef36148d5611a2a5112ec0d))
+* **webpack:** policy debugging capabilities and tighter tests ([20b12ad](https://github.com/kev-daniell/LavaMoat-ESM/commit/20b12ad38a78678c8291b4841e8c4d00b349c1aa))
+* **webpack:** support scuttling ([#1298](https://github.com/kev-daniell/LavaMoat-ESM/issues/1298)) ([9630600](https://github.com/kev-daniell/LavaMoat-ESM/commit/963060078d16fab80f24d49ea945a08fc51b9384))
+* **webpack:** webpack context modules and chunk lazy loading support ([#1553](https://github.com/kev-daniell/LavaMoat-ESM/issues/1553)) ([3602f65](https://github.com/kev-daniell/LavaMoat-ESM/commit/3602f6598196ec99287fe239aa1708d9f80c0e0c))
+
+
+### Bug Fixes
+
+* **core,webpack:** remove deprecated lockdown options ([efec539](https://github.com/kev-daniell/LavaMoat-ESM/commit/efec5391eec838689ce2426de617571d0f276f2c)), closes [#1578](https://github.com/kev-daniell/LavaMoat-ESM/issues/1578)
+* **core:** block circular global object endowments ([#1505](https://github.com/kev-daniell/LavaMoat-ESM/issues/1505)) ([6745a0e](https://github.com/kev-daniell/LavaMoat-ESM/commit/6745a0edee85171e4062aaec31d7f25bf3a97e46))
+* **deps:** update babel monorepo ([e6f4e70](https://github.com/kev-daniell/LavaMoat-ESM/commit/e6f4e70cffe8237c27126046bb0cfa5515c2d138))
+* **deps:** update babel monorepo to v7.25.8 ([1dcb35e](https://github.com/kev-daniell/LavaMoat-ESM/commit/1dcb35e023823710343b5f0a4ca589cdfe647e7d))
+* **deps:** update babel monorepo to v7.25.9 ([6d9d5a3](https://github.com/kev-daniell/LavaMoat-ESM/commit/6d9d5a3336444fada49e239756ffc3c207d3ff5d))
+* **deps:** update babel monorepo to v7.26.7 ([#1524](https://github.com/kev-daniell/LavaMoat-ESM/issues/1524)) ([7285fdf](https://github.com/kev-daniell/LavaMoat-ESM/commit/7285fdf6ce5c337443840525b79c7653708b541f))
+* **deps:** update babel monorepo to v7.26.9 ([6a9dc73](https://github.com/kev-daniell/LavaMoat-ESM/commit/6a9dc735f18a5b95e82b86ec2bd466ee4433172f))
+* **deps:** update dependency ses to v1.10.0 ([#1422](https://github.com/kev-daniell/LavaMoat-ESM/issues/1422)) ([b6f0589](https://github.com/kev-daniell/LavaMoat-ESM/commit/b6f0589cf9730fac8173a3fca0c4a031bd64f12f))
+* **deps:** update dependency ses to v1.9.0 ([75cae74](https://github.com/kev-daniell/LavaMoat-ESM/commit/75cae74063c444184fea3370bf9925bc7946846a))
+* make policy ordering consistntly manifest itself in json files produced ([a149a7d](https://github.com/kev-daniell/LavaMoat-ESM/commit/a149a7d16d65bc4255cf32211a671823356565da))
+* upgrade ses to v1.11.0 ([a12dae1](https://github.com/kev-daniell/LavaMoat-ESM/commit/a12dae13e8c7f70082199ba186659ea413e82ded))
+* **webpack:** import types from ses ([78aca55](https://github.com/kev-daniell/LavaMoat-ESM/commit/78aca5583adc5366c8717fd196b72bdd828b38ed))
+* **webpack:** prevent toString manipulation on a specifier ([1163085](https://github.com/kev-daniell/LavaMoat-ESM/commit/1163085b29bcc5a78f08b840393bf1edbe099045))
+* **webpack:** support regex in scuttling exceptions ([#1529](https://github.com/kev-daniell/LavaMoat-ESM/issues/1529)) ([45c0308](https://github.com/kev-daniell/LavaMoat-ESM/commit/45c0308c655c9903f9bdfa17a30460b10f22a219))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @lavamoat/aa bumped from ^4.3.2 to ^4.3.3
+    * lavamoat-core bumped from ^16.3.2 to ^16.4.0
+
 ## [0.9.0-beta.0](https://github.com/LavaMoat/LavaMoat/compare/webpack-v0.8.1-beta.0...webpack-v0.9.0-beta.0) (2025-03-11)
 
 
