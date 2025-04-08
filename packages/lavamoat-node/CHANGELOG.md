@@ -19,6 +19,31 @@
     * lavamoat-core bumped from ^15.2.0 to ^15.2.1
     * lavamoat-tofu bumped from ^7.2.1 to ^7.2.2
 
+## [9.0.9](https://github.com/kev-daniell/LavaMoat-ESM/compare/lavamoat-v9.0.8...lavamoat-v9.0.9) (2025-04-08)
+
+
+### Bug Fixes
+
+* 2 bugs manifested in walking content from policy-overrides ([#1471](https://github.com/kev-daniell/LavaMoat-ESM/issues/1471)) ([7599146](https://github.com/kev-daniell/LavaMoat-ESM/commit/7599146f6412777dd13d681283e1b5344297d0eb))
+* **core:** block circular global object endowments ([#1505](https://github.com/kev-daniell/LavaMoat-ESM/issues/1505)) ([6745a0e](https://github.com/kev-daniell/LavaMoat-ESM/commit/6745a0edee85171e4062aaec31d7f25bf3a97e46))
+* **deps:** update babel monorepo ([e6f4e70](https://github.com/kev-daniell/LavaMoat-ESM/commit/e6f4e70cffe8237c27126046bb0cfa5515c2d138))
+* **deps:** update babel monorepo to v7.25.9 ([6d9d5a3](https://github.com/kev-daniell/LavaMoat-ESM/commit/6d9d5a3336444fada49e239756ffc3c207d3ff5d))
+* **deps:** update babel monorepo to v7.26.2 ([9bac12a](https://github.com/kev-daniell/LavaMoat-ESM/commit/9bac12abd602632a6bd0ad3af5026cc627bf2b31))
+* **deps:** update dependency corepack to v0.30.0 ([4f4fd6e](https://github.com/kev-daniell/LavaMoat-ESM/commit/4f4fd6e503a79a2acee6347605be5b888f070d3b))
+* **deps:** update dependency node-gyp-build to v4.8.4 ([1c21367](https://github.com/kev-daniell/LavaMoat-ESM/commit/1c21367dff7d83bc94cdcfb8b0245a27d3e32bd0))
+* **deps:** update dependency resolve to v1.22.10 ([#1535](https://github.com/kev-daniell/LavaMoat-ESM/issues/1535)) ([17bee26](https://github.com/kev-daniell/LavaMoat-ESM/commit/17bee26ef5d24f8bcc48d4aac0a7e066a8bbf7af))
+* **lavamoat-node:** fix the bug that prevented following dependency relationships listed in policy overrides ([61df9ed](https://github.com/kev-daniell/LavaMoat-ESM/commit/61df9edc47bca3c47d2975032d7db30de833b458))
+* make policy ordering consistntly manifest itself in json files produced ([a149a7d](https://github.com/kev-daniell/LavaMoat-ESM/commit/a149a7d16d65bc4255cf32211a671823356565da))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @lavamoat/aa bumped from ^4.3.2 to ^4.3.3
+    * lavamoat-core bumped from ^16.3.2 to ^16.4.0
+    * lavamoat-tofu bumped from ^8.0.6 to ^8.0.7
+
 ## [9.0.8](https://github.com/LavaMoat/LavaMoat/compare/lavamoat-v9.0.7...lavamoat-v9.0.8) (2025-03-11)
 
 

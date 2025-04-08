@@ -6,6 +6,21 @@
   * dependencies
     * @lavamoat/aa bumped from ^4.0.1 to ^4.1.0
 
+## [3.3.3](https://github.com/kev-daniell/LavaMoat-ESM/compare/allow-scripts-v3.3.2...allow-scripts-v3.3.3) (2025-04-08)
+
+
+### Bug Fixes
+
+* **allow-scripts:** include type-fest as prod dep ([10d67f7](https://github.com/kev-daniell/LavaMoat-ESM/commit/10d67f79b08f2bb14b7056be7f964c5e16195407))
+* **deps:** update dependency type-fest to v4.30.0 ([6528665](https://github.com/kev-daniell/LavaMoat-ESM/commit/6528665e2e99221366444c23a0e52be447e04071))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @lavamoat/aa bumped from ^4.3.2 to ^4.3.3
+
 ## [3.3.2](https://github.com/LavaMoat/LavaMoat/compare/allow-scripts-v3.3.1...allow-scripts-v3.3.2) (2025-03-11)
 
 

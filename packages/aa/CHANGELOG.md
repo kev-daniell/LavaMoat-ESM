@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.3.3](https://github.com/kev-daniell/LavaMoat-ESM/compare/aa-v4.3.2...aa-v4.3.3) (2025-04-08)
+
+
+### Bug Fixes
+
+* **aa:** only require used sync submodule from resolve package ([517efa8](https://github.com/kev-daniell/LavaMoat-ESM/commit/517efa8f7e3222e6172dc075430eafa5a5961f47))
+* **deps:** update dependency resolve to v1.22.10 ([#1535](https://github.com/kev-daniell/LavaMoat-ESM/issues/1535)) ([17bee26](https://github.com/kev-daniell/LavaMoat-ESM/commit/17bee26ef5d24f8bcc48d4aac0a7e066a8bbf7af))
+
 ## [4.3.2](https://github.com/LavaMoat/LavaMoat/compare/aa-v4.3.1...aa-v4.3.2) (2025-03-11)
 
 
