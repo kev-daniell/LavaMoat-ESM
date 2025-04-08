@@ -1,0 +1,15 @@
+{
+  "resources": {
+    "esm-module>bignumber.js": {
+      "globals": {
+        "crypto": true,
+        "define": true
+      }
+    },
+    "esm-module": {
+      "packages": {
+        "esm-module>bignumber.js": true
+      }
+    }
+  }
+}
