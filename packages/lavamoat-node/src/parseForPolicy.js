@@ -18,12 +18,13 @@ const {
 const {
   parse,
   inspectImports,
+  inspectEsmImports,
   codeSampleFromAstNode,
 } = require('lavamoat-tofu')
 const { checkForResolutionOverride } = require('./resolutions')
 
 // file extension omitted can be omitted, eg https://npmfs.com/package/yargs/17.0.1/yargs
-const commonjsExtensions = ['', '.js', '.cjs']
+const validExtensions = ['', '.js', '.cjs', 'mjs']
 const resolutionOmittedExtensions = ['.js', '.json']
 
 /**
@@ -197,7 +198,7 @@ function makeImportHook({
       )
       return undefined
     }
-    if (commonjsExtensions.includes(extension)) {
+    if (validExtensions.includes(extension)) {
       return makeJsModuleRecord(specifier, content, filename, packageName)
     }
     if (extension === '.json') {
@@ -237,11 +238,24 @@ function makeImportHook({
   async function makeJsModuleRecord(specifier, content, filename, packageName) {
     // parse
     const ast = parseModule(content, specifier)
-    // get imports
+    
+    // get CommonJS imports
     const { cjsImports } = inspectImports(ast, null, false)
+    
+    // get ESM imports
+    const esmImports = inspectEsmImports(ast) || []
+    
+    // log if we found ESM imports (helpful for debugging)
+    if (esmImports.length > 0) {
+      console.log(`LavaMoat - Found ${esmImports.length} ESM imports in ${filename}`)
+    }
+    
+    // combine both import types (deduplicated)
+    const allImports = [...new Set([...cjsImports, ...esmImports])]
+    
     // build import map
     const importMap = Object.fromEntries(
-      cjsImports.map((requestedName) => {
+      allImports.map((requestedName) => {
         let depValue
         if (shouldResolve(requestedName, specifier)) {
           try {
