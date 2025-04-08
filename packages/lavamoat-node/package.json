@@ -50,5 +50,8 @@
       "test/*.spec.js"
     ],
     "timeout": "1m"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.2"
   }
 }

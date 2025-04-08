@@ -15,7 +15,7 @@ runLava(parseArgs()).catch((err) => {
 
 function parseArgs() {
   const argsParser = yargs
-    .usage('$0 <entryPath>', 'start the application', (yargs) => {
+    .usage('$0 <entryPath>', 'start the application (kevin-watermark v1.0.4)', (yargs) => {
       // the entry file to run (or parse)
       yargs.positional('entryPath', {
         describe:
