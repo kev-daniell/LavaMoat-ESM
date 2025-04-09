@@ -1,4 +1,4 @@
-module.exports = (yargs, defaults) => {
+export default (yargs, defaults) => {
   // the path for the policy file
   yargs.option('policy', {
     alias: ['p', 'policyPath'],

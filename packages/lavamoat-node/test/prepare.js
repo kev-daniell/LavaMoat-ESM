@@ -7,16 +7,19 @@
  * @packageDocumentation
  */
 
-'use strict'
-
-const Module = require('node:module')
-const path = require('node:path')
-const { execFile, spawnSync } = require('node:child_process')
-const { promisify } = require('node:util')
-const { rm, readdir } = require('node:fs/promises')
-const os = require('node:os')
+import Module from 'node:module'
+import path from 'node:path'
+import { execFile, spawnSync } from 'node:child_process'
+import { promisify } from 'node:util'
+import { rm, readdir, readFile } from 'node:fs/promises'
+import os from 'node:os'
+import { fileURLToPath } from 'node:url'
 
 const exec = promisify(execFile)
+
+// Get current file directory (equivalent to __dirname in CJS)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 /**
  * @todo Change this to `npm@latest` when Node.js v16 support is dropped
@@ -32,18 +35,22 @@ const COREPACK_ENV = {
   COREPACK_ENABLE_PROJECT_SPEC: '0',
 }
 
-/**
- * Path to `corepack` as installed in the workspace root
- */
-const COREPACK_PATH = path.dirname(require.resolve('corepack/package.json'))
+// Find corepack package.json in node_modules - look in root project
+const NODE_MODULES_BASE = path.resolve(__dirname, '../../../node_modules')
+const COREPACK_PACKAGE_PATH = path.join(
+  NODE_MODULES_BASE,
+  'corepack',
+  'package.json'
+)
+
+// Read corepack package.json
+const corepackPkg = JSON.parse(await readFile(COREPACK_PACKAGE_PATH, 'utf8'))
+const COREPACK_PATH = path.dirname(COREPACK_PACKAGE_PATH)
 
 /**
  * Path to `corepack` executable from workspace root
  */
-const COREPACK_BIN = path.resolve(
-  COREPACK_PATH,
-  require('corepack/package.json').bin.corepack
-)
+const COREPACK_BIN = path.resolve(COREPACK_PATH, corepackPkg.bin.corepack)
 
 /**
  * Blast `node_modules` in `cwd`
@@ -79,7 +86,10 @@ function resolveDependencyFrom(cwd, moduleId) {
  * @param {string} cwd
  */
 async function setupAppleSilicon(cwd) {
-  const { dependencies } = require(`${cwd}/package.json`)
+  const packageJson = JSON.parse(
+    await readFile(path.join(cwd, 'package.json'), 'utf8')
+  )
+  const dependencies = packageJson.dependencies || {}
   const KECCAK = 'keccak'
 
   // keccak ships no binaries for arm64 darwin
@@ -111,7 +121,7 @@ async function setup(cwd) {
 
   await exec(
     process.execPath,
-    [require.resolve('../src/cli'), '-a', 'index.js'],
+    [path.join(__dirname, '../src/cli.js'), '-a', 'index.js'],
     {
       cwd,
     }
@@ -140,7 +150,9 @@ async function main() {
   console.debug('Test fixtures prepared successfully')
 }
 
-if (require.main === module) {
+// In ESM, there is no require.main === module equivalent
+// Instead, we check if this is the main module being run
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch((err) => {
     console.error(err)
     process.exitCode = 1

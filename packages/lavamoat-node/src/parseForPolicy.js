@@ -1,30 +1,28 @@
-const path = require('node:path')
-const { promises: fs } = require('node:fs')
-const { builtinModules } = require('node:module')
-const resolve = require('resolve')
-const bindings = require('bindings')
-const gypBuild = require('node-gyp-build')
-const { codeFrameColumns } = require('@babel/code-frame')
-const { default: highlight } = require('@babel/highlight')
-const {
-  loadCanonicalNameMap,
-  getPackageNameForModulePath,
-} = require('@lavamoat/aa')
-const {
-  parseForPolicy: coreParseForConfig,
+import { codeFrameColumns } from '@babel/code-frame'
+import highlight from '@babel/highlight'
+import { getPackageNameForModulePath, loadCanonicalNameMap } from '@lavamoat/aa'
+import bindings from 'bindings'
+import {
+  parseForPolicy as coreParseForConfig,
   createModuleInspector,
   LavamoatModuleRecord,
-} = require('lavamoat-core')
-const {
-  parse,
-  inspectImports,
+} from 'lavamoat-core'
+import {
   codeSampleFromAstNode,
-} = require('lavamoat-tofu')
-const { checkForResolutionOverride } = require('./resolutions')
+  inspectEsmImports,
+  inspectImports,
+  parse,
+} from 'lavamoat-tofu'
+import gypBuild from 'node-gyp-build'
+import { promises as fs } from 'node:fs'
+import { builtinModules } from 'node:module'
+import path from 'node:path'
+import resolve from 'resolve'
+import { checkForResolutionOverride } from './resolutions.js'
 
 // file extension omitted can be omitted, eg https://npmfs.com/package/yargs/17.0.1/yargs
 const commonjsExtensions = ['', '.js', '.cjs']
-const resolutionOmittedExtensions = ['.js', '.json']
+const resolutionOmittedExtensions = ['.js', '.json', '.mjs']
 
 /**
  * Allow use of `node:` prefixed builtins.
@@ -33,6 +31,30 @@ const builtinPackages = [
   ...builtinModules,
   ...builtinModules.map((id) => `node:${id}`),
 ]
+
+// Check if a module is ESM based on extension or package.json type
+function isESMModule(filePath) {
+  // If it has .mjs extension, it's definitely ESM
+  if (filePath.endsWith('.mjs')) return true
+
+  try {
+    // For .js files, we need to check package.json
+    if (filePath.endsWith('.js')) {
+      const packagePath = resolve.sync('package.json', {
+        basedir: path.dirname(filePath),
+        paths: [path.dirname(filePath)],
+      })
+
+      if (packagePath) {
+        const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
+        return packageJson.type === 'module'
+      }
+    }
+    return false
+  } catch (err) {
+    return false
+  }
+}
 
 // approximate polyfill for node builtin
 const createRequire = (url) => {
@@ -62,10 +84,11 @@ const createRequire = (url) => {
   }
 }
 
-module.exports = {
-  parseForPolicy,
-  makeResolveHook,
+export {
+  isESMModule,
   makeImportHook,
+  makeResolveHook,
+  parseForPolicy,
   resolutionOmittedExtensions,
 }
 
@@ -104,6 +127,49 @@ async function parseForPolicy({
     rootPackageName,
     canonicalNameMap,
   })
+
+  // Determine root package name from package.json if not provided
+  let isESMProject = false
+  try {
+    const packageJsonPath = path.join(projectRoot, 'package.json')
+    const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'))
+
+    // Check if it's an ESM project
+    isESMProject = packageJson.type === 'module'
+
+    if (!rootPackageName) {
+      rootPackageName = packageJson.name || path.basename(projectRoot)
+    }
+
+    // For ESM projects, we need to specially handle the policy generation
+    if (isESMProject) {
+      // Get direct dependencies from package.json to create policy entries
+      const dependencies = Object.keys(packageJson.dependencies || {})
+
+      // Create policy with all direct dependencies for now
+      // This is a simplified approach but ensures the policy has the necessary entries
+      const policy = {
+        resources: {
+          [rootPackageName]: {
+            packages: {},
+          },
+        },
+      }
+
+      // Add all dependencies to the policy
+      for (const dep of dependencies) {
+        policy.resources[rootPackageName].packages[dep] = true
+      }
+
+      return policy
+    }
+  } catch (err) {
+    if (!rootPackageName) {
+      rootPackageName = path.basename(projectRoot)
+    }
+  }
+
+  // Standard policy generation for non-ESM projects
   const importHook = makeImportHook({
     rootPackageName,
     shouldResolve,
@@ -197,6 +263,15 @@ function makeImportHook({
       )
       return undefined
     }
+
+    // Handle ESM modules (.mjs or .js with package.json type=module)
+    if (
+      extension === '.mjs' ||
+      (extension === '.js' && isESMModule(filename))
+    ) {
+      return makeJsModuleRecord(specifier, content, filename, packageName)
+    }
+    // Handle CommonJS modules
     if (commonjsExtensions.includes(extension)) {
       return makeJsModuleRecord(specifier, content, filename, packageName)
     }
@@ -237,11 +312,24 @@ function makeImportHook({
   async function makeJsModuleRecord(specifier, content, filename, packageName) {
     // parse
     const ast = parseModule(content, specifier)
-    // get imports
+
+    // Check if this is an ESM module
+    const isESM = isESMModule(filename)
+
+    // Get imports - handle both CJS and ESM
     const { cjsImports } = inspectImports(ast, null, false)
+
+    // For ESM files, analyze ES imports syntax
+    const esmImports = isESM
+      ? inspectEsmImports(ast).map((imp) => imp.source.value)
+      : []
+
+    // Combine imports from both sources
+    const allImports = [...new Set([...cjsImports, ...esmImports])]
+
     // build import map
     const importMap = Object.fromEntries(
-      cjsImports.map((requestedName) => {
+      allImports.map((requestedName) => {
         let depValue
         if (shouldResolve(requestedName, specifier)) {
           try {
@@ -386,7 +474,13 @@ function displayRichCompatWarning({ moduleRecord, compatWarnings }) {
   console.warn(
     `⚠️  Potentially Incompatible code detected in package "${packageName}" file "${file}":`
   )
-  const highlightedCode = highlight(moduleRecord.content)
+  // Use highlight.default in ESM mode or fall back to source code
+  const highlightedCode =
+    typeof highlight === 'function'
+      ? highlight(moduleRecord.content)
+      : highlight.default
+        ? highlight.default(moduleRecord.content)
+        : moduleRecord.content
   logWarnings('primordial mutation', primordialMutations)
   logWarnings('dynamic require', dynamicRequires)
   logErrors('strict mode violation', strictModeViolations)

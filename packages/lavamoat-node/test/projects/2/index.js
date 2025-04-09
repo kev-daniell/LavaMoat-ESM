@@ -7,7 +7,7 @@
 // that can accidently trigger a constructor return override
 
 const { Buffer } = require('buffer')
-const createKeccakHash = require('keccak')
+const createKeccakHash = require('keccak/js.js')
 
 const result = getHash('abcdef1234567890')
 console.log(`keccak256: ${result}`)

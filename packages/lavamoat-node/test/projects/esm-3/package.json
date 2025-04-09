@@ -1,0 +1,12 @@
+{
+  "name": "test-esm-project",
+  "type": "module",
+  "packageManager": "yarn@1.22.22",
+  "scripts": {
+    "setup": "exit 0"
+  },
+  "dependencies": {
+    "esm-module": "file:./node-modules/esm-module",
+    "send": "^1.2.0"
+  }
+}
