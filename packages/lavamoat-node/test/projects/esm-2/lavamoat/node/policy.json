@@ -1,0 +1,9 @@
+{
+  "resources": {
+    "bad-esm-module": {
+      "globals": {
+        "console.log": true
+      }
+    }
+  }
+}
