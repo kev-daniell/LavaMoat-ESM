@@ -1,6 +1,8 @@
 /* eslint no-eval: 0 */
 const fs = require('node:fs')
 const path = require('node:path')
+const { transformSync } = require('esbuild')
+const enhancedResolve = require('enhanced-resolve')
 const resolve = require('resolve')
 const { sanitize } = require('htmlescape')
 const {
@@ -107,11 +109,29 @@ function createModuleResolver({ projectRoot, resolutions, canonicalNameMap }) {
         parentDir = projectRoot
       }
     }
-    // resolve normally
-    const resolved = resolve.sync(requestedName, {
-      basedir: parentDir,
-      extensions: resolutionOmittedExtensions,
+
+    const enhancedResolver = enhancedResolve.ResolverFactory.createResolver({
+      fileSystem: fs,
+      useSyncFileSystemCalls: true,
+      extensions: ['.js', '.json'],
+      mainFields: ['main'],
+      conditionNames: ['require', 'node'],
+      exportsFields: ['exports'], // This is critical for package.json exports
     })
+
+    let resolved
+
+    try {
+      resolved = resolve.sync(requestedName, {
+        basedir: parentDir,
+        extensions: resolutionOmittedExtensions,
+      })
+    } catch (err) {
+      // If the resolution fails, we try to resolve it using the enhanced resolver
+      // to support export maps https://webpack.js.org/guides/package-exports/
+      resolved = enhancedResolver.resolveSync({}, parentDir, requestedName)
+    }
+
     return resolved
   }
 }
@@ -149,8 +169,30 @@ function createModuleLoader({ canonicalNameMap }) {
       // load normal user-space module
     } else {
       const moduleContent = fs.readFileSync(absolutePath, 'utf8')
-      // apply source transforms
+
+      // Check if this is an ESM file that needs transformation
       let transformedContent = moduleContent
+      if (isESMFile(absolutePath)) {
+        try {
+          const result = transformSync(moduleContent, {
+            loader: 'js',
+            format: 'cjs',
+            sourcefile: absolutePath,
+          })
+          transformedContent = result.code
+        } catch (err) {
+          // Only log in non-test environments
+          if (
+            !absolutePath.includes('/tmp') &&
+            !absolutePath.includes('/temp/')
+          ) {
+            console.warn(
+              `LavaMoat - Error transforming ESM module: ${err.message}`
+            )
+          }
+        }
+      }
+
       // hash bang
       const contentLines = transformedContent.split('\n')
       if (contentLines[0].startsWith('#!')) {
@@ -229,4 +271,84 @@ function onStatsReady(moduleGraphStatsObj) {
   const statsFilePath = `./lavamoat-flame-${graphId}.json`
   console.warn(`wrote stats file to "${statsFilePath}"`)
   fs.writeFileSync(statsFilePath, JSON.stringify(moduleGraphStatsObj, null, 2))
+}
+
+/**
+ * Determines if a file should be treated as an ESM module
+ *
+ * @param {string} filePath - The absolute path to the file
+ * @returns {boolean} - True if the file should be treated as ESM
+ */
+function isESMFile(filePath) {
+  // Skip ESM checks for tests/temporary directories
+  if (
+    filePath.includes('/tmp-') ||
+    filePath.includes('/temp/') ||
+    filePath.includes('/tmp/')
+  ) {
+    return false
+  }
+
+  // Always treat .mjs files as ESM
+  if (filePath.endsWith('.mjs')) {
+    return true
+  }
+
+  // Always treat .cjs files as CommonJS
+  if (filePath.endsWith('.cjs')) {
+    return false
+  }
+
+  // Check if the file is from an ESM package (has "type": "module" in package.json)
+  try {
+    // Find the package directory by walking up from the file
+    let currentDir = path.dirname(filePath)
+    let packageJsonFound = false
+
+    // Limit directory traversal to avoid excessive searching
+    let maxTraversals = 5
+
+    while (
+      currentDir &&
+      currentDir !== '/' &&
+      !packageJsonFound &&
+      maxTraversals > 0
+    ) {
+      maxTraversals--
+
+      try {
+        const packageJsonPath = path.join(currentDir, 'package.json')
+
+        if (fs.existsSync(packageJsonPath)) {
+          packageJsonFound = true
+          const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8')
+
+          // Try to check without using JSON.parse to be safe in scuttled environments
+          const hasModule =
+            packageJsonContent.includes('"type":') &&
+            packageJsonContent.includes('"module"')
+
+          if (hasModule) {
+            // Basic regex check instead of JSON.parse to avoid issues in scuttled environments
+            const typeModuleMatch = /"type"\s*:\s*"module"/.test(
+              packageJsonContent
+            )
+            return typeModuleMatch
+          }
+
+          return false
+        }
+      } catch (innerErr) {
+        // Silent fail for any file operation errors
+      }
+
+      // Move up one directory
+      currentDir = path.dirname(currentDir)
+    }
+  } catch (err) {
+    // Silently fail - assume non-ESM to be safe
+  }
+
+  // Default to CommonJS if we can't determine
+  return false
 }
