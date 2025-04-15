@@ -15,15 +15,19 @@ runLava(parseArgs()).catch((err) => {
 
 function parseArgs() {
   const argsParser = yargs
-    .usage('$0 <entryPath>', 'start the application', (yargs) => {
-      // the entry file to run (or parse)
-      yargs.positional('entryPath', {
-        describe:
-          'the path to the entry file for your application. same as node.js',
-        type: 'string',
-      })
-      yargsFlags(yargs, defaults)
-    })
+    .usage(
+      '$0 <entryPath>',
+      'start the application (watermark v1.0.12)',
+      (yargs) => {
+        // the entry file to run (or parse)
+        yargs.positional('entryPath', {
+          describe:
+            'the path to the entry file for your application. same as node.js',
+          type: 'string',
+        })
+        yargsFlags(yargs, defaults)
+      }
+    )
     .help()
 
   const parsedArgs = argsParser.parse()
