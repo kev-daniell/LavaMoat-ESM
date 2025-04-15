@@ -6,6 +6,49 @@
   * dependencies
     * lavamoat-tofu bumped from ^7.2.1 to ^7.2.2
 
+## [16.4.0](https://github.com/kev-daniell/LavaMoat-ESM/compare/lavamoat-core-v16.3.2...lavamoat-core-v16.4.0) (2025-04-15)
+
+
+### Features
+
+* **core:** add "redefine" global policy value to schema ([09d78ba](https://github.com/kev-daniell/LavaMoat-ESM/commit/09d78badd3b3cc2e982ce690e84133d9959f43b2)), closes [#1583](https://github.com/kev-daniell/LavaMoat-ESM/issues/1583)
+* **core:** export endowmentsToolkit from the root ([4abfade](https://github.com/kev-daniell/LavaMoat-ESM/commit/4abfade71ca4f7473ead3d2c48426dd4a7293f76))
+* **core:** policy sorting cli for cleaner sort order migration ([#1467](https://github.com/kev-daniell/LavaMoat-ESM/issues/1467)) ([b2cf7c3](https://github.com/kev-daniell/LavaMoat-ESM/commit/b2cf7c33fe59adcab888c72164818bd590cf11c7))
+* **core:** second param to mergePolicy is now explicitly optional ([f2302aa](https://github.com/kev-daniell/LavaMoat-ESM/commit/f2302aa1e805456e17bf966193676c1466bb98ca))
+* **core:** sort policy in a diff-friendly way ([#1350](https://github.com/kev-daniell/LavaMoat-ESM/issues/1350)) - sort order remains unchanged even if path to dependency changed. ([4af8ad7](https://github.com/kev-daniell/LavaMoat-ESM/commit/4af8ad7559e1ab12c541488cf537ecc18ce0d6dc))
+* **core:** support untrusted entrypoints ([36018de](https://github.com/kev-daniell/LavaMoat-ESM/commit/36018dea2bbe9b7d16588e0333974dd98ee2d02d))
+* **webpack:** policy debugging capabilities and tighter tests ([20b12ad](https://github.com/kev-daniell/LavaMoat-ESM/commit/20b12ad38a78678c8291b4841e8c4d00b349c1aa))
+
+
+### Bug Fixes
+
+* 2 bugs manifested in walking content from policy-overrides ([#1471](https://github.com/kev-daniell/LavaMoat-ESM/issues/1471)) ([7599146](https://github.com/kev-daniell/LavaMoat-ESM/commit/7599146f6412777dd13d681283e1b5344297d0eb))
+* **core,webpack:** remove deprecated lockdown options ([efec539](https://github.com/kev-daniell/LavaMoat-ESM/commit/efec5391eec838689ce2426de617571d0f276f2c)), closes [#1578](https://github.com/kev-daniell/LavaMoat-ESM/issues/1578)
+* **core:** block circular global object endowments ([#1505](https://github.com/kev-daniell/LavaMoat-ESM/issues/1505)) ([6745a0e](https://github.com/kev-daniell/LavaMoat-ESM/commit/6745a0edee85171e4062aaec31d7f25bf3a97e46))
+* **core:** fix broken references, type checking for mergePolicy.js ([b08adef](https://github.com/kev-daniell/LavaMoat-ESM/commit/b08adef9bdfaf19e3e5951cfe2019271d689124a))
+* **core:** ignore global Function in policy ([55f8c7b](https://github.com/kev-daniell/LavaMoat-ESM/commit/55f8c7bd07de7f51fc2db81972f6f7d447f33e9e))
+* **core:** move ses to production dependencies ([27c0e8b](https://github.com/kev-daniell/LavaMoat-ESM/commit/27c0e8b191c8a8145e90dd5487cd09cad75500de))
+* **core:** update vendored lockdown.umd.js ([41a2d54](https://github.com/kev-daniell/LavaMoat-ESM/commit/41a2d541f80956b2623d6176d8580825df29b52d))
+* **deps:** update babel monorepo ([e6f4e70](https://github.com/kev-daniell/LavaMoat-ESM/commit/e6f4e70cffe8237c27126046bb0cfa5515c2d138))
+* **deps:** update babel monorepo to v7.25.8 ([1dcb35e](https://github.com/kev-daniell/LavaMoat-ESM/commit/1dcb35e023823710343b5f0a4ca589cdfe647e7d))
+* **deps:** update babel monorepo to v7.25.9 ([6d9d5a3](https://github.com/kev-daniell/LavaMoat-ESM/commit/6d9d5a3336444fada49e239756ffc3c207d3ff5d))
+* **deps:** update babel monorepo to v7.26.10 ([#1561](https://github.com/kev-daniell/LavaMoat-ESM/issues/1561)) ([2757717](https://github.com/kev-daniell/LavaMoat-ESM/commit/275771754578647346da1ece0f86afaabdd5de36))
+* **deps:** update babel monorepo to v7.26.5 ([#1501](https://github.com/kev-daniell/LavaMoat-ESM/issues/1501)) ([4e1e19d](https://github.com/kev-daniell/LavaMoat-ESM/commit/4e1e19d4f585fb730f32b581ed44d448b9d03122))
+* **deps:** update babel monorepo to v7.26.7 ([#1524](https://github.com/kev-daniell/LavaMoat-ESM/issues/1524)) ([7285fdf](https://github.com/kev-daniell/LavaMoat-ESM/commit/7285fdf6ce5c337443840525b79c7653708b541f))
+* **deps:** update babel monorepo to v7.26.9 ([6a9dc73](https://github.com/kev-daniell/LavaMoat-ESM/commit/6a9dc735f18a5b95e82b86ec2bd466ee4433172f))
+* **deps:** update dependency ses to v1.10.0 ([#1422](https://github.com/kev-daniell/LavaMoat-ESM/issues/1422)) ([b6f0589](https://github.com/kev-daniell/LavaMoat-ESM/commit/b6f0589cf9730fac8173a3fca0c4a031bd64f12f))
+* **deps:** update dependency ses to v1.9.0 ([75cae74](https://github.com/kev-daniell/LavaMoat-ESM/commit/75cae74063c444184fea3370bf9925bc7946846a))
+* **deps:** update dependency type-fest to v4.30.0 ([6528665](https://github.com/kev-daniell/LavaMoat-ESM/commit/6528665e2e99221366444c23a0e52be447e04071))
+* make policy ordering consistntly manifest itself in json files produced ([a149a7d](https://github.com/kev-daniell/LavaMoat-ESM/commit/a149a7d16d65bc4255cf32211a671823356565da))
+* upgrade ses to v1.11.0 ([a12dae1](https://github.com/kev-daniell/LavaMoat-ESM/commit/a12dae13e8c7f70082199ba186659ea413e82ded))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * lavamoat-tofu bumped from ^8.0.6 to ^8.0.7
+
 ## [16.3.2](https://github.com/LavaMoat/LavaMoat/compare/lavamoat-core-v16.3.1...lavamoat-core-v16.3.2) (2025-03-11)
 
 

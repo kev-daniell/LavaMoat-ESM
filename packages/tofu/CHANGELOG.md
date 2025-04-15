@@ -1,5 +1,28 @@
 # Changelog
 
+## [8.0.7](https://github.com/kev-daniell/LavaMoat-ESM/compare/lavamoat-tofu-v8.0.6...lavamoat-tofu-v8.0.7) (2025-04-15)
+
+
+### Bug Fixes
+
+* **deps:** update babel monorepo ([e6f4e70](https://github.com/kev-daniell/LavaMoat-ESM/commit/e6f4e70cffe8237c27126046bb0cfa5515c2d138))
+* **deps:** update babel monorepo to v7.25.8 ([1dcb35e](https://github.com/kev-daniell/LavaMoat-ESM/commit/1dcb35e023823710343b5f0a4ca589cdfe647e7d))
+* **deps:** update babel monorepo to v7.25.9 ([6d9d5a3](https://github.com/kev-daniell/LavaMoat-ESM/commit/6d9d5a3336444fada49e239756ffc3c207d3ff5d))
+* **deps:** update babel monorepo to v7.26.10 ([#1561](https://github.com/kev-daniell/LavaMoat-ESM/issues/1561)) ([2757717](https://github.com/kev-daniell/LavaMoat-ESM/commit/275771754578647346da1ece0f86afaabdd5de36))
+* **deps:** update babel monorepo to v7.26.2 ([9bac12a](https://github.com/kev-daniell/LavaMoat-ESM/commit/9bac12abd602632a6bd0ad3af5026cc627bf2b31))
+* **deps:** update babel monorepo to v7.26.5 ([#1501](https://github.com/kev-daniell/LavaMoat-ESM/issues/1501)) ([4e1e19d](https://github.com/kev-daniell/LavaMoat-ESM/commit/4e1e19d4f585fb730f32b581ed44d448b9d03122))
+* **deps:** update babel monorepo to v7.26.7 ([#1524](https://github.com/kev-daniell/LavaMoat-ESM/issues/1524)) ([7285fdf](https://github.com/kev-daniell/LavaMoat-ESM/commit/7285fdf6ce5c337443840525b79c7653708b541f))
+* **deps:** update babel monorepo to v7.26.9 ([6a9dc73](https://github.com/kev-daniell/LavaMoat-ESM/commit/6a9dc735f18a5b95e82b86ec2bd466ee4433172f))
+* **deps:** update dependency type-fest to v4.30.0 ([6528665](https://github.com/kev-daniell/LavaMoat-ESM/commit/6528665e2e99221366444c23a0e52be447e04071))
+* make policy ordering consistntly manifest itself in json files produced ([a149a7d](https://github.com/kev-daniell/LavaMoat-ESM/commit/a149a7d16d65bc4255cf32211a671823356565da))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * peerDependencies
+    * lavamoat-core bumped from >15.4.0 to >16.4.0
+
 ## [8.0.6](https://github.com/LavaMoat/LavaMoat/compare/lavamoat-tofu-v8.0.5...lavamoat-tofu-v8.0.6) (2025-03-11)
 
 

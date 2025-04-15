@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.0.1](https://github.com/kev-daniell/LavaMoat-ESM/compare/node-v0.1.0...node-v0.0.1) (2025-04-15)
+
+
+### Features
+
+* **node:** add --quiet and --verbose ([5ad4603](https://github.com/kev-daniell/LavaMoat-ESM/commit/5ad4603c9358fb80f3ff86ab5e3b5267ae772a1f))
+* **node:** better UX for specifying entrypoints ([5598351](https://github.com/kev-daniell/LavaMoat-ESM/commit/5598351e9656239dc3d8e8e8936c5f75148ff3fb))
+* **node:** create @lavamoat/node ([ab09d8f](https://github.com/kev-daniell/LavaMoat-ESM/commit/ab09d8f3aeb6cee17d8291431bcd5e39871e1fae))
+* **node:** support untrusted entrypoints ([fa2b46e](https://github.com/kev-daniell/LavaMoat-ESM/commit/fa2b46e2a66fdf45e5f1868d6fdfb76fbcc2ca0e))
+
+
+### Bug Fixes
+
+* **deps:** update definitelytyped ([fd357e6](https://github.com/kev-daniell/LavaMoat-ESM/commit/fd357e6b3f0b0f7c6e776bf1ec33396c4c9b4fef))
+* **deps:** update dependency @endo/evasive-transform to v1.3.4 ([#1530](https://github.com/kev-daniell/LavaMoat-ESM/issues/1530)) ([6b10352](https://github.com/kev-daniell/LavaMoat-ESM/commit/6b10352292855c10150d2bd8566ba3ad03f2f53d))
+* **deps:** upgrade @endo/compartment-mapper, @endo/evasive-transform ([#1588](https://github.com/kev-daniell/LavaMoat-ESM/issues/1588)) ([81fa130](https://github.com/kev-daniell/LavaMoat-ESM/commit/81fa130089e3e6f48d8b6c639392c58fa14fd338))
+* **node,perf:** upgrade @endo/compartment-mapper ([3126d9d](https://github.com/kev-daniell/LavaMoat-ESM/commit/3126d9d62abbcd30ddb6a14608b95209dd37ed83))
+* **node:** allow flags to be passed to entrypoint ([c03a0e1](https://github.com/kev-daniell/LavaMoat-ESM/commit/c03a0e1607a3530a7a759a74c857180446d9b657)), closes [#1504](https://github.com/kev-daniell/LavaMoat-ESM/issues/1504)
+* **node:** canonical names in policy generation ([#1546](https://github.com/kev-daniell/LavaMoat-ESM/issues/1546)) ([4d5bdac](https://github.com/kev-daniell/LavaMoat-ESM/commit/4d5bdacc0540bb8a6135ecb649ee15a7d0ad8e30))
+* **node:** disable "dev" mode by default ([5d59529](https://github.com/kev-daniell/LavaMoat-ESM/commit/5d59529b2428752a478590f6ad86a5eef35c770d)), closes [#1503](https://github.com/kev-daniell/LavaMoat-ESM/issues/1503)
+* **node:** update ses to v1.10.0 ([13aeb82](https://github.com/kev-daniell/LavaMoat-ESM/commit/13aeb8277bd9a7a42c53293b595ff6a807d47b57))
+* upgrade ses to v1.11.0 ([a12dae1](https://github.com/kev-daniell/LavaMoat-ESM/commit/a12dae13e8c7f70082199ba186659ea413e82ded))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * lavamoat-core bumped from ^16.3.2 to ^16.4.0
+
 ## [0.1.0](https://github.com/LavaMoat/LavaMoat/compare/node-v0.0.2...node-v0.1.0) (2025-03-11)
 
 
